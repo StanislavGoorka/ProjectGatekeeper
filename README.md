@@ -14,6 +14,7 @@ Anti-cheat files will be added later.
 
 
 **I strongly discourage anyone from using included bot as a standalone software as in most games this is considered cheating and may result in a permanent ban.
+
 I take no responsibility for using given bot in any game including Metin2.**
 ---
 
