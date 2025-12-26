@@ -167,6 +167,10 @@ x:: {
 	UseHorse()
 }
 
+!x:: {
+	LureMobs()
+}
+
 x up:: {
 }
 
@@ -178,3 +182,8 @@ x up:: {
 
 ^+x up:: {
 }
+
+!x up:: {
+}
+
+!Esc::ExitApp
