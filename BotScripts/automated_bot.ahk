@@ -5,7 +5,6 @@ buffDelay := 2000
 afterBuffDelay := 1000
 fastDelay := 30
 mediumDelay := 200
-longDelay := 5000
 cycleTime := 175
 cycleTimeLeft := cycleTime
 lureInterval := 30000
@@ -47,9 +46,11 @@ UseHorse() {
 LureMobs(*) {
 	global fastDelay
 	global lureDelay
-	global longDelay
+	global cycleTimeLeft
 
-	Sleep RandomizeDelay(longDelay)
+	if (cycleTimeLeft <= 30) {
+		return
+	}
 
 	Send "{F4 down}"
 	Sleep RandomizeDelay(fastDelay)
@@ -179,7 +180,7 @@ CycleManager(*) {
 		isLureTimerRunning := true
 	}
 
-	if (cycleTimeLeft < 5) {
+	if (cycleTimeLeft < 10 && cycleTimeLeft >= 0) {
 		SetTimer(LureMobs, 0)
 		isLureTimerRunning := false
 		EndFight()
@@ -195,14 +196,20 @@ CycleManager(*) {
 x:: {
 	global isBotRunning
 	global isLureTimerRunning
+	global cycleTimeLeft
 
 	if (!isBotRunning) {
-		SetTimer(CycleManager, 2000)
+		SetTimer(CycleManager, 100)
 		isBotRunning := true
 	} else {
 		SetTimer(CycleManager, 0)
-		EndFight()
 		isBotRunning := false
+
+		SetTimer(LureMobs, 0)
+		isLureTimerRunning := false
+
+		EndFight()
+		cycleTimeLeft := cycleTime
 	}
 }
 
