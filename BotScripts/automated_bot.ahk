@@ -163,7 +163,7 @@ TimerTick(*) {
 	txt.Text := --cycleTimeLeft
 }
 
-CycleManager(*) {
+CycleStateMachine(*) {
 	global cycleTime
 	global cycleTimeLeft
 	global lureInterval
@@ -199,10 +199,10 @@ x:: {
 	global cycleTimeLeft
 
 	if (!isBotRunning) {
-		SetTimer(CycleManager, 100)
+		SetTimer(CycleStateMachine, 100)
 		isBotRunning := true
 	} else {
-		SetTimer(CycleManager, 0)
+		SetTimer(CycleStateMachine, 0)
 		isBotRunning := false
 
 		SetTimer(LureMobs, 0)
