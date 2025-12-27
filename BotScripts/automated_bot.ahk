@@ -167,14 +167,19 @@ CycleStateMachine(*) {
 	global cycleTime
 	global cycleTimeLeft
 	global lureInterval
+	global isBotRunning
 	global isLureTimerRunning
 
-	if (cycleTimeLeft = cycleTime) {
+	if (!isBotRunning) {
 		UseHorse()
+		if (cycleTimeLeft >= 0) {
+			RemoveBuffs()
+		}
 		ApplyBuffs()
 		UseHorse()
-		LureMobs()
+		RefreshBonuses()
 		StartFight()
+		LureMobs()
 	} else if (!isLureTimerRunning) {
 		SetTimer(LureMobs, lureInterval)
 		isLureTimerRunning := true
@@ -188,8 +193,9 @@ CycleStateMachine(*) {
 		RemoveBuffs()
 		ApplyBuffs()
 		UseHorse()
-		LureMobs()
+		RefreshBonuses()
 		StartFight()
+		LureMobs()
 	}
 }
 
@@ -200,6 +206,7 @@ x:: {
 
 	if (!isBotRunning) {
 		SetTimer(CycleStateMachine, 100)
+		Sleep 200
 		isBotRunning := true
 	} else {
 		SetTimer(CycleStateMachine, 0)
@@ -209,7 +216,6 @@ x:: {
 		isLureTimerRunning := false
 
 		EndFight()
-		cycleTimeLeft := cycleTime
 	}
 }
 
