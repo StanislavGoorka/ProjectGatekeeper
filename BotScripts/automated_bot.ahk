@@ -5,10 +5,23 @@ buffDelay := 2000
 afterBuffDelay := 1000
 fastDelay := 30
 mediumDelay := 200
-buffTime := 175
-spaceHeld := false
+longDelay := 5000
+cycleTime := 175
+cycleTimeLeft := cycleTime
+lureInterval := 30000
+isBotRunning := false
+isLureTimerRunning := false
 
 SendMode "Event"
+
+overlay := Gui("+AlwaysOnTop -Caption +ToolWindow +E0x20")
+overlay.BackColor := "Black"
+overlay.SetFont("s14 cWhite", "Segoe UI")
+
+txt := overlay.Add("Text", "BackgroundTrans", cycleTimeLeft)
+
+overlay.Show("x20 y20 NoActivate")
+
 
 RandomizeDelay(baseDelay) {
 	multiplier := Random()
@@ -31,9 +44,12 @@ UseHorse() {
 	Sleep RandomizeDelay(mediumDelay)
 }
 
-LureMobs() {
+LureMobs(*) {
 	global fastDelay
 	global lureDelay
+	global longDelay
+
+	Sleep RandomizeDelay(longDelay)
 
 	Send "{F4 down}"
 	Sleep RandomizeDelay(fastDelay)
@@ -71,6 +87,8 @@ ApplyBuffs() {
 	global fastDelay
 	global buffDelay
 	global afterBuffDelay
+	global cycleTime
+	global cycleTimeLeft
 
 	Send "{F1 down}"
 	Sleep RandomizeDelay(fastDelay)
@@ -89,6 +107,9 @@ ApplyBuffs() {
 	Send "{F3 up}"
 
 	Sleep RandomizeDelay(afterBuffDelay)
+
+	cycleTimeLeft := cycleTime
+	SetTimer(TimerTick, 1000)
 }
 
 RemoveBuffs() {
@@ -134,9 +155,55 @@ RefreshBonuses() {
 	Sleep RandomizeDelay(fastDelay)
 }
 
-x:: {
+TimerTick(*) {
+	global cycleTimeLeft
+	global txt
 
-	
+	txt.Text := --cycleTimeLeft
+}
+
+CycleManager(*) {
+	global cycleTime
+	global cycleTimeLeft
+	global lureInterval
+	global isLureTimerRunning
+
+	if (cycleTimeLeft = cycleTime) {
+		UseHorse()
+		ApplyBuffs()
+		UseHorse()
+		LureMobs()
+		StartFight()
+	} else if (!isLureTimerRunning) {
+		SetTimer(LureMobs, lureInterval)
+		isLureTimerRunning := true
+	}
+
+	if (cycleTimeLeft < 5) {
+		SetTimer(LureMobs, 0)
+		isLureTimerRunning := false
+		EndFight()
+		UseHorse()
+		RemoveBuffs()
+		ApplyBuffs()
+		UseHorse()
+		LureMobs()
+		StartFight()
+	}
+}
+
+x:: {
+	global isBotRunning
+	global isLureTimerRunning
+
+	if (!isBotRunning) {
+		SetTimer(CycleManager, 2000)
+		isBotRunning := true
+	} else {
+		SetTimer(CycleManager, 0)
+		EndFight()
+		isBotRunning := false
+	}
 }
 
 x up:: {
