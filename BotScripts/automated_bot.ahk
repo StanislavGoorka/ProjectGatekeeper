@@ -219,7 +219,23 @@ x:: {
 	}
 }
 
++x:: {
+	global cycleTime
+	global cycleTimeLeft
+
+	SetTimer(CycleStateMachine, 0)
+	isBotRunning := false
+
+	SetTimer(LureMobs, 0)
+	isLureTimerRunning := false
+
+	cycleTimeLeft := cycleTime
+}
+
 x up:: {
+}
+
++x up:: {
 }
 
 !Esc::ExitApp
