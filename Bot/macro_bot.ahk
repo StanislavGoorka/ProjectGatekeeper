@@ -1,4 +1,6 @@
-﻿lureDelay := 500
+﻿; MACRO BOT - The User needs to use specified hotkeys to perform predefined macros
+
+lureDelay := 500
 buffDelay := 2000
 afterBuffDelay := 1000
 fastDelay := 30
