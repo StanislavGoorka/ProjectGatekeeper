@@ -172,7 +172,7 @@ CycleStateMachine(*) {
 
 	if (!isBotRunning) {
 		UseHorse()
-		if (cycleTimeLeft >= 0) {
+		if (cycleTimeLeft >= 0 && cycleTimeLeft != cycleTime) {
 			RemoveBuffs()
 		}
 		ApplyBuffs()
@@ -222,6 +222,7 @@ x:: {
 +x:: {
 	global cycleTime
 	global cycleTimeLeft
+	global txt
 
 	SetTimer(CycleStateMachine, 0)
 	isBotRunning := false
@@ -229,7 +230,12 @@ x:: {
 	SetTimer(LureMobs, 0)
 	isLureTimerRunning := false
 
+	SetTimer(TimerTick, 0)
 	cycleTimeLeft := cycleTime
+
+	EndFight()
+
+	txt.Text := cycleTimeLeft
 }
 
 x up:: {
